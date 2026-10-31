@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beat USB | Simulador NFT Musical</title>
+<style>
+:root {
+  --brand: #c026d3;
+  --brand2: #db2777;
+  --accent: #f0abfc;
+  --bg: #170b24;
+  --card: #251333;
+  --line: #54305f;
+  --text: #fff0fc;
+  --muted: #d0b5dc;
+  --danger: #fb7185;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+h1, h2, h3 { letter-spacing: -.3px; }
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.hero {
+  padding: 38px 20px;
+  background: linear-gradient(120deg, #4a145f, #9d174d);
+}
+
+.inner, .wrap {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: clamp(27px, 5vw, 42px);
+  margin: 0;
+}
+
+.hero p {
+  max-width: 680px;
+  color: #f5d0fe;
+  line-height: 1.65;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #f5b8ff;
+}
+
+.wrap { padding: 20px; }
+
+.toolbar {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin: 14px 0;
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+  flex: 1;
+  min-width: 145px;
+}
+
+label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+input, select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #21102e;
+  color: var(--text);
+}
+
+button {
+  padding: 10px 13px;
+  border-radius: 8px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: white;
+  font-weight: 650;
+}
+
+button.secondary {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+button.green {
+  background: var(--brand2);
+  border-color: var(--brand2);
+}
+
+button.danger {
+  background: #4a202c;
+  border-color: #713342;
+}
+
+button:hover { filter: brightness(1.13); }
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 9px;
+  margin: 15px 0;
+}
+
+.kpi, .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.kpi span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.kpi strong {
+  display: block;
+  font-size: 23px;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+
+section { margin: 24px 0; }
+
+h2 {
+  font-size: 20px;
+  margin: 0 0 12px;
+}
+
+h3 {
+  font-size: 16px;
+  margin: 0 0 7px;
+}
+
+.muted, .small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 12px;
+}
+
+.formgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.full { grid-column: 1 / -1; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.art {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.cover {
+  height: 145px;
+  background: linear-gradient(135deg, #86198f, #be185d);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.cover svg {
+  width: 100%;
+  height: 100%;
+}
+
+.artbody { padding: 13px; }
+
+.artbody h3 {
+  overflow-wrap: anywhere;
+  margin-top: 8px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid #79418a;
+  border-radius: 20px;
+  color: #f0abfc;
+  font-size: 11px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 750;
+  margin: 10px 0;
+}
+
+.artbody button {
+  width: 100%;
+  margin-top: 7px;
+}
+
+.empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+}
+
+.tablewrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+th {
+  color: #f5b8ff;
+  background: #3b1d4c;
+}
+
+.pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notice {
+  padding: 12px 14px;
+  border: 1px solid #79418a;
+  background: #30183e;
+  border-radius: 10px;
+  color: #f5d0fe;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--line);
+}
+
+@media(max-width:480px) {
+  .wrap { padding: 12px; }
+  .formgrid { grid-template-columns: 1fr; }
+  .full { grid-column: auto; }
+  .toolbar button { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <div class="eyebrow">USB Bogotá · Laboratorio de innovación</div>
+    <h1>🎧 Beat USB</h1>
+    <p>Simulador educativo de coleccionables musicales digitales.
+    Crea obras, publícalas, adquiere ediciones y registra intercambios
+    entre participantes. Todo funciona localmente en tu navegador.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="notice">
+    <strong>Simulación local:</strong> los NFT, precios y transferencias
+    son ficticios. No existe conexión a una blockchain real ni se procesan
+    pagos. Utiliza nombres y contenidos de demostración.
+  </div>
+
+  <section>
+    <div class="toolbar">
+      <div class="field">
+        <label for="role">Identidad activa</label>
+        <select id="role"></select>
+      </div>
+      <button class="secondary" id="saveJson">Guardar JSON</button>
+      <button class="secondary" id="loadButton">Cargar JSON</button>
+      <input id="loadFile" type="file" accept=".json,application/json" hidden>
+      <button class="secondary" id="csvButton">Exportar CSV</button>
+      <button class="danger" id="resetButton">Reset y recargar</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Panel de actividad</h2>
+    <div id="kpis" class="kpis" aria-live="polite"></div>
+    <div class="card">
+      <h3>Distribución por rareza</h3>
+      <div id="rarities" class="pills"></div>
+      <p class="muted">El ticket promedio corresponde al precio medio de
+      las adquisiciones registradas, no al precio actual de las obras.</p>
+    </div>
+  </section>
+
+  <section class="layout">
+    <div class="card">
+      <h2>🎙️ Crear / mintear obra</h2>
+      <form id="mintForm" class="formgrid">
+        <div class="field full">
+          <label for="title">Título de la obra</label>
+          <input id="title" maxlength="100" required
+          placeholder="Ej. Frecuencia de medianoche">
+        </div>
+        <div class="field">
+          <label for="category">Categoría musical</label>
+          <select id="category">
+            <option>Reguetón</option>
+            <option>Regional mexicano</option>
+            <option>Rock en español</option>
+            <option>Pop en inglés</option>
+            <option>Rap mexicano</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="rarity">Rareza</label>
+          <select id="rarity">
+            <option>Común</option>
+            <option>Rara</option>
+            <option>Épica</option>
+            <option>Legendaria</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="price">Precio ficticio (UF)</label>
+          <input id="price" type="number" min="1" max="1000000"
+          step="1" value="100" required>
+        </div>
+        <div class="field">
+          <label for="emoji">Miniatura</label>
+          <select id="emoji">
+            <option>🎵</option><option>🎤</option><option>🎸</option>
+            <option>🎹</option><option>🎧</option><option>🥁</option>
+            <option>💿</option><option>🔥</option><option>🌙</option>
+          </select>
+        </div>
+        <button type="submit" class="full green">Crear obra</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>👥 Crew musical</h2>
+      <p class="muted">Roles y número de piezas que posee cada participante.</p>
+      <div id="crew"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🛍️ Beat Market</h2>
+    <p class="muted">Publicaciones disponibles para adquisición por otra identidad.</p>
+    <div id="market" class="grid"></div>
+  </section>
+
+  <section>
+    <h2>💿 Mi colección</h2>
+    <p class="muted">Tus obras. Puedes publicarlas en venta o retirar una oferta.</p>
+    <div id="collection" class="grid"></div>
+  </section>
+
+  <section class="card">
+    <h2>🔄 Simular transacción</h2>
+    <form id="transferForm" class="formgrid">
+      <div class="field">
+        <label for="transferWork">Obra propia</label>
+        <select id="transferWork" required></select>
+      </div>
+      <div class="field">
+        <label for="recipient">Destinatario</label>
+        <select id="recipient" required></select>
+      </div>
+      <div class="field">
+        <label for="detail">Edición / formato / licencia</label>
+        <input id="detail" maxlength="160" required
+        placeholder="Ej. Edición digital deluxe">
+      </div>
+      <div class="field">
+        <label for="transferPrice">Precio simulado (UF)</label>
+        <input id="transferPrice" type="number" min="0"
+        max="1000000" step="1" value="0" required>
+      </div>
+      <button class="full" type="submit">Registrar transferencia</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>📜 Registro de movimientos</h2>
+    <div class="tablewrap" id="history"></div>
+  </section>
+
+  <section class="card">
+    <h2>📖 Guía rápida</h2>
+    <ol class="muted">
+      <li>Crea una obra con título, categoría, rareza y precio.</li>
+      <li>En Mi colección, publícala en Beat Market.</li>
+      <li>Cambia de identidad y adquiere la obra indicando su edición.</li>
+      <li>Usa el formulario de transferencia para simular otro intercambio.</li>
+      <li>Exporta CSV o guarda un JSON para recuperar la demostración.</li>
+      <li>El botón Reset elimina el estado de este simulador y recarga la página.</li>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  Beat USB · Prototipo educativo de NFT musical · Sin blockchain real ni pagos.
+</footer>
+
+<script>
+"use strict";
+
+// ====================================================
+// 1. Catálogo, roles y estado local
+// ====================================================
+const KEY = "nft_musica_v1";
+
+const ROLES = [
+  "Artista",
+  "Productor musical",
+  "Sello discográfico",
+  "Distribuidor",
+  "Coleccionista"
+];
+
+const CATEGORIES = [
+  "Reguetón",
+  "Regional mexicano",
+  "Rock en español",
+  "Pop en inglés",
+  "Rap mexicano"
+];
+
+const RARITIES = ["Común", "Rara", "Épica", "Legendaria"];
+
+const SEED = [
+  ["Noche de neón", "Reguetón", "Épica", 320, "🌙", "Artista"],
+  ["Ritmo de verano", "Reguetón", "Común", 80, "🎧", "Productor musical"],
+  ["Polvo y estrellas", "Regional mexicano", "Rara", 190, "🎸", "Artista"],
+  ["Camino de vuelta", "Regional mexicano", "Común", 75, "🤠", "Sello discográfico"],
+  ["Distorsión urbana", "Rock en español", "Legendaria", 700, "🎸", "Artista"],
+  ["Último amplificador", "Rock en español", "Épica", 360, "⚡", "Productor musical"],
+  ["Electric Dreams", "Pop en inglés", "Rara", 210, "🎹", "Sello discográfico"],
+  ["Silver Lights", "Pop en inglés", "Común", 95, "💿", "Distribuidor"],
+  ["Rimas del barrio", "Rap mexicano", "Legendaria", 620, "🎤", "Artista"],
+  ["Barras de concreto", "Rap mexicano", "Rara", 180, "🔥", "Coleccionista"]
+];
+
+function uid() {
+  if (globalThis.crypto?.randomUUID)
+    return "MUS-" + crypto.randomUUID();
+
+  return "MUS-" + Date.now().toString(36) + "-" +
+    Math.random().toString(36).slice(2, 12);
+}
+
+function now() {
+  return new Date().toISOString();
+}
+
+function initialState() {
+  return {
+    version: 1,
+    activeRole: ROLES[0],
+    works: SEED.map(x => ({
+      id: uid(),
+      title: x[0],
+      category: x[1],
+      rarity: x[2],
+      price: x[3],
+      emoji: x[4],
+      owner: x[5],
+      listed: true,
+      createdAt: now(),
+      edition: "Edición de catálogo"
+    })),
+    txs: []
+  };
+}
+
+function validState(s) {
+  return !!s && s.version === 1 &&
+    ROLES.includes(s.activeRole) &&
+    Array.isArray(s.works) && Array.isArray(s.txs) &&
+    s.works.length <= 10000 && s.txs.length <= 50000 &&
+    s.works.every(w =>
+      w && typeof w.id === "string" &&
+      typeof w.title === "string" && w.title.length <= 100 &&
+      CATEGORIES.includes(w.category) &&
+      RARITIES.includes(w.rarity) &&
+      ROLES.includes(w.owner) &&
+      Number.isSafeInteger(w.price) && w.price >= 0 &&
+      typeof w.listed === "boolean" &&
+      typeof w.emoji === "string" &&
+      typeof w.edition === "string"
+    ) &&
+    s.txs.every(t =>
+      t && typeof t.id === "string" &&
+      typeof t.ts === "string" &&
+      typeof t.type === "string" &&
+      typeof t.title === "string" &&
+      Number.isFinite(t.price)
+    );
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch (e) {
+    alert("No se pudo guardar el estado local. Exporta un JSON como respaldo.");
+  }
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (validState(data)) return data;
+    }
+  } catch (e) {
+    console.warn("No fue posible recuperar el estado guardado.", e);
+  }
+  return initialState();
+}
+
+let state = load();
+
+// ====================================================
+// 2. Utilidades y registro de movimientos
+// ====================================================
+const $ = id => document.getElementById(id);
+
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+function money(n) {
+  return Number(n).toLocaleString("es-CO",
+    { maximumFractionDigits: 0 }) + " UF";
+}
+
+function getWork(id) {
+  return state.works.find(w => w.id === id);
+}
+
+function owned() {
+  return state.works.filter(w => w.owner === state.activeRole);
+}
+
+function record(type, w, from, to, price, detail) {
+  state.txs.push({
+    id: uid(),
+    ts: now(),
+    type,
+    workId: w?.id || "",
+    title: w?.title || "",
+    from: from || "",
+    to: to || "",
+    price: Number(price) || 0,
+    detail: detail || ""
+  });
+  save();
+}
+
+// ====================================================
+// 3. Miniaturas SVG locales en rosa y morado
+// ====================================================
+function coverSvg(w) {
+  const palettes = {
+    "Reguetón": ["#701a75", "#db2777"],
+    "Regional mexicano": ["#6b214f", "#c026d3"],
+    "Rock en español": ["#3b0764", "#be185d"],
+    "Pop en inglés": ["#86198f", "#ec4899"],
+    "Rap mexicano": ["#581c87", "#e11d48"]
+  };
+
+  const p = palettes[w.category] || ["#86198f", "#db2777"];
+
+  return `<svg viewBox="0 0 320 145" role="img"
+    aria-label="${esc("Miniatura de " + w.title)}"
+    xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g" x2="1" y2="1">
+        <stop stop-color="${p[0]}"/>
+        <stop offset="1" stop-color="${p[1]}"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="145" fill="url(#g)"/>
+    <circle cx="260" cy="15" r="76" fill="#fff" opacity=".10"/>
+    <circle cx="40" cy="145" r="75" fill="#fff" opacity=".08"/>
+    <text x="160" y="88" text-anchor="middle" font-size="58">${esc(w.emoji)}</text>
+  </svg>`;
+}
+
+function artwork(w, actions) {
+  return `<article class="art">
+    <div class="cover">${coverSvg(w)}</div>
+    <div class="artbody">
+      <span class="tag">${esc(w.rarity)}</span>
+      <h3>${esc(w.title)}</h3>
+      <p class="muted">${esc(w.category)}</p>
+      <p class="small">ID: ${esc(w.id)}</p>
+      <p class="small">Propietario: ${esc(w.owner)}</p>
+      <div class="price">${money(w.price)}</div>
+      ${actions}
+    </div>
+  </article>`;
+}
+
+// ====================================================
+// 4. Crear obra / mint
+// ====================================================
+$("mintForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const title = $("title").value.trim();
+  const price = Number($("price").value);
+
+  if (!title || !Number.isSafeInteger(price) ||
+      price < 1 || price > 1000000) {
+    alert("Escribe un título y un precio entero entre 1 y 1.000.000 UF.");
+    return;
+  }
+
+  const w = {
+    id: uid(),
+    title,
+    category: $("category").value,
+    rarity: $("rarity").value,
+    price,
+    emoji: $("emoji").value,
+    owner: state.activeRole,
+    listed: false,
+    createdAt: now(),
+    edition: "Edición original"
+  };
+
+  state.works.push(w);
+  record("CREACIÓN", w, "", state.activeRole, 0, "Mint de obra original");
+
+  $("mintForm").reset();
+  $("price").value = 100;
+  render();
+});
+
+// ====================================================
+// 5. Listar y comprar
+// ====================================================
+function toggleListing(id) {
+  const w = getWork(id);
+  if (!w || w.owner !== state.activeRole) return;
+
+  w.listed = !w.listed;
+
+  record(
+    w.listed ? "PUBLICACIÓN" : "RETIRO DE OFERTA",
+    w,
+    w.owner,
+    w.owner,
+    0,
+    w.listed ? "Obra puesta en venta" : "Oferta retirada"
+  );
+
+  render();
+}
+
+function buy(id) {
+  const w = getWork(id);
+  if (!w || !w.listed || w.owner === state.activeRole) return;
+
+  const seller = w.owner;
+  const buyer = state.activeRole;
+  const price = w.price;
+
+  const detail = prompt(
+    "Detalle de adquisición (edición, formato o licencia):",
+    "Edición digital estándar"
+  );
+
+  if (detail === null) return;
+
+  if (!detail.trim()) {
+    alert("Especifica el detalle de la adquisición.");
+    return;
+  }
+
+  w.owner = buyer;
+  w.listed = false;
+  w.edition = detail.trim().slice(0, 160);
+
+  record("COMPRA", w, seller, buyer, price, w.edition);
+  render();
+}
+
+// ====================================================
+// 6. Transferencias simuladas
+// ====================================================
+function mountTransfer() {
+  const choices = owned();
+
+  $("transferWork").innerHTML = choices.map(w =>
+    `<option value="${esc(w.id)}">${esc(w.title)}</option>`
+  ).join("");
+
+  if (!choices.length) {
+    $("transferWork").innerHTML =
+      '<option value="">Sin obras propias</option>';
+  }
+
+  $("transferWork").disabled = !choices.length;
+
+  $("recipient").innerHTML = ROLES.filter(r => r !== state.activeRole)
+    .map(r => `<option value="${esc(r)}">${esc(r)}</option>`)
+    .join("");
+}
+
+$("transferForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const w = getWork($("transferWork").value);
+  const to = $("recipient").value;
+  const detail = $("detail").value.trim();
+  const price = Number($("transferPrice").value);
+
+  if (!w || w.owner !== state.activeRole ||
+      !ROLES.includes(to) || to === state.activeRole ||
+      !detail || !Number.isSafeInteger(price) ||
+      price < 0 || price > 1000000) {
+    alert("Revisa obra, destinatario, detalle y precio.");
+    return;
+  }
+
+  const from = w.owner;
+  w.owner = to;
+  w.listed = false;
+  w.edition = detail.slice(0, 160);
+
+  record("TRANSFERENCIA", w, from, to, price, w.edition);
+
+  $("detail").value = "";
+  $("transferPrice").value = 0;
+  render();
+});
+
+// ====================================================
+// 7. Render de estadísticas, mercado y colección
+// ====================================================
+function render() {
+  $("role").value = state.activeRole;
+
+  const works = state.works;
+  const purchases = state.txs.filter(t => t.type === "COMPRA");
+
+  const avg = purchases.length
+    ? purchases.reduce((sum, t) => sum + t.price, 0) / purchases.length
+    : 0;
+
+  const uniqueRoles = new Set(works.map(w => w.owner)).size;
+
+  $("kpis").innerHTML = [
+    ["Total de piezas", works.length],
+    ["Roles únicos", uniqueRoles],
+    ["Ticket promedio", money(avg)],
+    ["Total de transacciones", state.txs.length],
+    ["Piezas en venta", works.filter(w => w.listed).length]
+  ].map(([label, value]) =>
+    `<div class="kpi"><span>${esc(label)}</span>
+    <strong>${esc(value)}</strong></div>`
+  ).join("");
+
+  $("rarities").innerHTML = RARITIES.map(r =>
+    `<span class="tag">${esc(r)}: ${works.filter(w => w.rarity === r).length}</span>`
+  ).join("");
+
+  $("crew").innerHTML = `<div class="tablewrap"><table>
+    <thead><tr><th>Rol</th><th>Piezas</th></tr></thead>
+    <tbody>${ROLES.map(r => `<tr><td>${esc(r)}</td>
+    <td>${works.filter(w => w.owner === r).length}</td></tr>`).join("")}
+    </tbody></table></div>`;
+
+  const market = works.filter(w =>
+    w.listed && w.owner !== state.activeRole
+  );
+
+  $("market").innerHTML = market.length
+    ? market.map(w => artwork(w,
+      `<button data-buy="${esc(w.id)}">Comprar yo</button>`)).join("")
+    : '<div class="empty">No hay ofertas disponibles para esta identidad.</div>';
+
+  const collection = owned();
+
+  $("collection").innerHTML = collection.length
+    ? collection.map(w => artwork(w,
+      `<button class="secondary" data-list="${esc(w.id)}">${
+        w.listed ? "Retirar oferta" : "Listar en Beat Market"
+      }</button>`)).join("")
+    : '<div class="empty">Esta identidad aún no tiene obras.</div>';
+
+  $("market").querySelectorAll("[data-buy]").forEach(b =>
+    b.addEventListener("click", () => buy(b.dataset.buy))
+  );
+
+  $("collection").querySelectorAll("[data-list]").forEach(b =>
+    b.addEventListener("click", () => toggleListing(b.dataset.list))
+  );
+
+  mountTransfer();
+
+  const txs = state.txs.slice().reverse();
+
+  $("history").innerHTML = txs.length
+    ? `<table><thead><tr><th>Fecha</th><th>Operación</th>
+       <th>Obra</th><th>Origen → destino</th><th>Precio</th>
+       <th>Detalle</th></tr></thead><tbody>${
+       txs.map(t => `<tr>
+       <td>${esc(new Date(t.ts).toLocaleString("es-CO"))}</td>
+       <td>${esc(t.type)}</td><td>${esc(t.title)}</td>
+       <td>${esc(t.from || "—")} → ${esc(t.to || "—")}</td>
+       <td>${money(t.price)}</td><td>${esc(t.detail)}</td>
+       </tr>`).join("")
+       }</tbody></table>`
+    : '<div class="empty">Sin movimientos registrados.</div>';
+}
+
+// ====================================================
+// 8. Selector de identidad
+// ====================================================
+$("role").innerHTML = ROLES.map(r =>
+  `<option value="${esc(r)}">${esc(r)}</option>`
+).join("");
+
+$("role").value = state.activeRole;
+
+$("role").addEventListener("change", () => {
+  state.activeRole = $("role").value;
+  save();
+  render();
+});
+
+// ====================================================
+// 9. Exportar CSV de obras y transacciones
+// ====================================================
+function csvCell(value) {
+  let s = String(value ?? "");
+
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+
+function download(name, content, mime) {
+  const blob = new Blob(["\uFEFF", content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("csvButton").addEventListener("click", () => {
+  const wh = [
+    "id", "title", "category", "rarity", "price", "emoji",
+    "owner", "listed", "edition", "createdAt"
+  ];
+
+  const wr = state.works.map(w =>
+    wh.map(h => csvCell(w[h])).join(",")
+  );
+
+  download(
+    "beat-usb-obras.csv",
+    [wh.join(","), ...wr].join("\r\n"),
+    "text/csv;charset=utf-8"
+  );
+
+  const th = [
+    "id", "ts", "type", "workId", "title",
+    "from", "to", "price", "detail"
+  ];
+
+  const tr = state.txs.map(t =>
+    th.map(h => csvCell(t[h])).join(",")
+  );
+
+  download(
+    "beat-usb-transacciones.csv",
+    [th.join(","), ...tr].join("\r\n"),
+    "text/csv;charset=utf-8"
+  );
+});
+
+// ====================================================
+// 10. Guardar y cargar JSON
+// ====================================================
+$("saveJson").addEventListener("click", () => {
+  download(
+    "beat-usb-respaldo.json",
+    JSON.stringify(state, null, 2),
+    "application/json;charset=utf-8"
+  );
+});
+
+$("loadButton").addEventListener("click", () => $("loadFile").click());
+
+$("loadFile").addEventListener("change", async e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  try {
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error("El archivo supera el límite de 5 MB.");
+    }
+
+    const imported = JSON.parse(await file.text());
+
+    if (!validState(imported)) {
+      throw new Error("El formato del archivo no es válido.");
+    }
+
+    if (!confirm("¿Reemplazar el estado actual con el respaldo seleccionado?"))
+      return;
+
+    state = imported;
+    save();
+    render();
+    alert("Respaldo cargado correctamente.");
+  } catch (err) {
+    alert("No se pudo cargar el archivo: " + err.message);
+  } finally {
+    e.target.value = "";
+  }
+});
+
+// ====================================================
+// 11. Reiniciar el simulador
+// ====================================================
+$("resetButton").addEventListener("click", () => {
+  if (!confirm("¿Borrar el estado de Beat USB y comenzar de nuevo?"))
+    return;
+
+  localStorage.removeItem(KEY);
+  location.reload();
+});
+
+// Inicialización
+render();
+</script>
+</body>
+</html>
